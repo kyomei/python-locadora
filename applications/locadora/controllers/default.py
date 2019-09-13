@@ -58,6 +58,7 @@ def download():
     return response.download(request, db)
 
 # Cria novo registro no banco
+@auth.requires_membership('funcionario')
 def novo_filme():
     form = SQLFORM(Filmes)
     if form.process().accepted:
