@@ -71,6 +71,10 @@ def novo_filme():
     return dict(form=form)
 
 # Lista os registro cadastrados no banco
+def ver_filmes_grid():
+    grid = SQLFORM.grid(Filmes)
+    return dict(grid=grid)
+
 def ver_filmes():
     if request.vars.filme:
         # Busca filme exatamente como está na url e na tabela
