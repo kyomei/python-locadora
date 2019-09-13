@@ -72,7 +72,13 @@ def novo_filme():
 
 # Lista os registro cadastrados no banco
 def ver_filmes():
-    filmes = db(Filmes).select()
+    if request.vars.filme:
+        # Busca filme exatamente como está na url e na tabela
+        # filmes = db(Filmes.titulo == request.vars.filme).select()
+
+        filmes = db(Filmes.titulo.like('%'+request.vars.filme+'%')).select()
+    else:
+        filmes = db(Filmes).select()
     return dict(filmes=filmes)
 
 # Atualiza os registro no banco
