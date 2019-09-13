@@ -57,14 +57,38 @@ def download():
     """
     return response.download(request, db)
 
+# Cria novo registro no banco
 def novo_filme():
     form = SQLFORM(Filmes)
     if form.process().accepted:
-        session.flash = 'Novo vídeo cadastrado: %s' % form.vars.titulo
+        session.flash = 'Novo filme cadastrado: %s' % form.vars.titulo
         redirect(URL('novo_filme'))
     elif form.errors:
         response.flash = 'Erros no formulário!'
     else:
-        response.flash = 'Preencha o formulário!'
+        if not response.flash:
+            response.flash = 'Preencha o formulário!'
     return dict(form=form)
-    return dict()
+
+# Lista os registro cadastrados no banco
+def ver_filmes():
+    filmes = db(db.filmes.diretor.contains("Rafael")).select()
+    return dict(filmes=filmes)
+
+# Atualiza os registro no banco
+def editar_filme():
+    form = SQLFORM(Filmes, request.args(0, cast=int), showid=False)
+    if form.process().accepted:
+        session.flash = 'Filme atualizado: %s' % form.vars.titulo
+        redirect(URL('ver_filmes'))
+    elif form.errors:
+        response.flash = 'Erros no formulário!'
+    else:
+        if not response.flash:
+            response.flash = 'Preencha o formulário!'
+    return dict(form=form)
+
+
+def teste():
+    form = SQLFORM(db.filmes)
+    return dict(form=form)
