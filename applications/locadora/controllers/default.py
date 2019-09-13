@@ -72,7 +72,7 @@ def novo_filme():
 
 # Lista os registro cadastrados no banco
 def ver_filmes():
-    filmes = db(db.filmes.diretor.contains("Rafael")).select()
+    filmes = db(Filmes).select()
     return dict(filmes=filmes)
 
 # Atualiza os registro no banco
@@ -88,7 +88,18 @@ def editar_filme():
             response.flash = 'Preencha o formulário!'
     return dict(form=form)
 
+# Excluir registro no banco
+def apagar_filme():
+    db(Filmes.id==request.args(0, cast=int)).delete()
+    session.flash = 'Filme apagado!'
+    redirect(URL('ver_filmes'))
 
 def teste():
-    form = SQLFORM(db.filmes)
-    return dict(form=form)
+    teste = SQLFORM(db.filmes)
+
+    if teste.process().accepted:
+        session.flash = 'hahaha form processado'
+        redirect(URL('teste'))
+    else:
+        response.flash = 'Nao processado'
+    return dict(form=teste)
